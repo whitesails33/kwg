@@ -1,0 +1,14 @@
+{
+  "name": "grid_search",
+  "version": "1.0.0",
+  "description": "Searching for rewards like a child means less generalization and more directed exploration",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

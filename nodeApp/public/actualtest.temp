@@ -1,0 +1,46 @@
+npm install --save-dev jest puppeteer
+
+
+const puppeteer = require('puppeteer');
+
+let browser, page;
+
+beforeAll(async () => {
+  browser = await puppeteer.launch();
+  page = await browser.newPage();
+  await page.goto('http://localhost:3000');
+});
+
+afterAll(() => {
+  browser.close();
+});
+
+describe('Grid Search Game', () => {
+  test('Main page loads with correct title', async () => {
+    const title = await page.title();
+    expect(title).toBe('GridSearch');
+  });
+
+  test('Initial form is present', async () => {
+    const formVisible = await page.$('div#rt-start') !== null;
+    expect(formVisible).toBe(true);
+  });
+
+  test('Start button is present', async () => {
+    const startButton = await page.$('button#btn-initial-form') !== null;
+    expect(startButton).toBe(true);
+  });
+
+  // Add more tests as needed
+});
+
+
+
+package.json file change 
+
+"scripts": {
+  "test": "jest"
+},
+"jest": {
+  "testEnvironment": "node"
+}
