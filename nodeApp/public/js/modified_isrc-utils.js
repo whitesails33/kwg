@@ -19,30 +19,37 @@ var isrcUtils = {
 
 
 
-
-
+    /**
+     */
+    },
 
 
     /**
-     * Cordova: receivedEvent()
      */
-    // receivedEvent: function (id) {
-
-    //     switch (id) {
-    //         case 'deviceready':
-    //             this.Setup();
-    //             isrcUtils.SetHandlers();
-    //             break;
-    //     }
+    },
 
 
-    // },
+    /**
+     */
+
+        switch (id) {
+            case 'deviceready':
+                this.Setup();
+                isrcUtils.SetHandlers();
+                break;
+        }
+
+
+    },
 
 
     /**
      * Setup()
      */
     Setup: function () {
+
+        // Immersive mode
+
         // Routes setup
         var routes = document.querySelectorAll('div.route');
         for (var i = 0; i < routes.length; ++i) {
@@ -50,13 +57,20 @@ var isrcUtils = {
         }
         var route = document.getElementById('rt-start');
         if (route) route.style.display = 'block';
-    
+
         // Routes buttons setup
-        var buttons = document.querySelectorAll('button[data-href]');
-        for (var i = 0; i < buttons.length; ++i) {
+        var buttons = document.querySelectorAll('button[data-href]'),
+            i;
+        for (i = 0; i < buttons.length; ++i) {
             buttons[i].addEventListener('click', isrcUtils.ButtonGoto);
         }
-    
+
+        // Enter pinned mode
+        //isrcUtils.enterPinnedMode();
+
+        // Setup DB
+//         //isrcUtils.SetupDb();
+
         // Set counter
         if (localStorage.getItem("isrc-utils-counter") === null) {
             localStorage.setItem("isrc-utils-counter", 0);
@@ -65,48 +79,48 @@ var isrcUtils = {
             var count = parseInt(localStorage.getItem("isrc-utils-counter"));
             localStorage.setItem("isrc-utils-counter", count + 1);
         }
+
     },
-    
+
 
     /**
      * SetHandlers()
      */
     SetHandlers: function () {
-        document.addEventListener('DOMContentLoaded', function() {
-            isrcUtils.buttons[0] = document.getElementById('btn-initial-form');
-            if (isrcUtils.buttons[0])
-                isrcUtils.buttons[0].addEventListener('click', isrcUtils.InitialFormSubmit);
-    
-            isrcUtils.buttons[1] = document.getElementById('btn-app-restart');
-            if (isrcUtils.buttons[1])
-                isrcUtils.buttons[1].addEventListener('click', isrcUtils.Restart);
-    
-            isrcUtils.buttons[2] = document.getElementById('stats-records');
-            if (isrcUtils.buttons[2])
-                isrcUtils.buttons[2].addEventListener('click', isrcUtils.SaveDataToFileDialog);
-        });
+
+        isrcUtils.buttons[0] = document.getElementById('btn-initial-form');
+        if (isrcUtils.buttons[0])
+            isrcUtils.buttons[0].addEventListener('click', isrcUtils.InitialFormSubmit);
+
+        isrcUtils.buttons[1] = document.getElementById('btn-app-restart');
+        if (isrcUtils.buttons[1])
+            isrcUtils.buttons[1].addEventListener('click', isrcUtils.Restart);
+
+        isrcUtils.buttons[2] = document.getElementById('stats-records');
+        if (isrcUtils.buttons[2])
+//             isrcUtils.buttons[2].addEventListener('click', isrcUtils.SaveDataToFileDialog);
+
     },
-    
 
 
     /**
 	 * enterPinnedMode()
 	 */
-	// enterPinnedMode() {
-	// 	if (typeof cordova !== 'undefined') {
-	// 		cordova.plugins.screenPinning.enterPinnedMode(
-	// 			function () { console.log('entered pinned mode') },
-	// 			function (error) { console.log('error when entering pinned mode: ' + error) },
-	// 			true
-	// 		);
-	// 	}
-	// },
+	enterPinnedMode() {
+		if (typeof cordova !== 'undefined') {
+			cordova.plugins.screenPinning.enterPinnedMode(
+				function () { console.log('entered pinned mode') },
+				function (error) { console.log('error when entering pinned mode: ' + error) },
+				true
+			);
+		}
+	},
 
 
     /**
-     * SetupDb()
+//      * SetupDb()
     //Specific to tablet. Removed for publication
-    SetupDb: function () {
+//     SetupDb: function () {
 
         isrcUtils.db = window.sqlitePlugin.openDatabase({
             name: 'data.db',
@@ -130,58 +144,53 @@ var isrcUtils = {
      */
     InitialFormSubmit: function () {
         var input = document.getElementById('uid-input');
-        if (!input || !input.value.trim()) return;
-    
-        isrcUtils.data.uid = input.value.trim();
+        if (input.value == null || input.value == "") return;
+
+        isrcUtils.data.uid = input.value;
         isrcUtils.initialTimeStamp = new Date();
-    
+
         var topbarUid = document.getElementById('user-id');
         if (topbarUid) topbarUid.innerHTML = 'User ID: ' + isrcUtils.data.uid;
-    
+
         isrcUtils.Goto('page1');
     },
-    
 
 
     /**
      * ButtonGoto()
      */
     ButtonGoto: function (evt) {
-        // Using currentTarget to ensure the correct element is referenced
-        var href = evt.currentTarget.getAttribute('data-href');
-        
-        // Checking if href is not null or undefined
-        if (href) {
-            isrcUtils.Goto(href);
-        }
+        var href = evt.target.getAttribute('data-href');
+        isrcUtils.Goto(href);
         return true;
     },
-    
 
 
     /**
      * Goto()
      */
     Goto: function (href) {
-        const route = document.getElementById(href);
-        if (route) {
-            const routes = document.querySelectorAll('div.route');
-            routes.forEach(function (r) {
-                r.style.display = 'none';
-            });
+        var route = document.getElementById(href);
+        if (route != null) {
+            var routes = document.querySelectorAll('div.route'),
+                i;
+            for (i = 0; i < routes.length; ++i) {
+                routes[i].style.display = 'none';
+            }
             route.style.display = 'block';
         }
     },
-    
 
 
     /**
      * GetCounter()
      */
     GetCounter: function () {
-        return localStorage.getItem("isrc-utils-counter") || 0;
+        if (localStorage.getItem("isrc-utils-counter") === null)
+            return 0;
+        else
+            return localStorage.getItem("isrc-utils-counter");
     },
-    
 
 
     /**
@@ -212,17 +221,13 @@ var isrcUtils = {
      * ImagesPreload()
      */
     PreloadImages: function (images) {
-        let baseIndex = isrcUtils.preloadedImages.length;
-        for (let i = 0; i < images.length; i++) {
-            if (!isrcUtils.preloadedImages.includes(images[i])) {
-                isrcUtils.preloadedImages[baseIndex + i] = new Image();
-                isrcUtils.preloadedImages[baseIndex + i].src = images[i];
-            }
+        var baseIndex = isrcUtils.preloadedImages.length - 1;
+        for (var i = 0; i < images.length; i++) {
+            isrcUtils.preloadedImages[baseIndex + i] = new Image();
+            isrcUtils.preloadedImages[baseIndex + i].src = images[i];
         }
     },
-    
 
-    // modified till this line will do the rest of the modification tomorrow 
 
     /**
      * SaveAndEnd()
@@ -256,7 +261,7 @@ var isrcUtils = {
         console.log('# Saving Data...');
         console.log(isrcUtils.data);
 
-        isrcUtils.SaveDataToDb();
+//         isrcUtils.SaveDataToDb();
 
         isrcUtils.PrintDataDebug();
         
@@ -264,9 +269,9 @@ var isrcUtils = {
 
 
     /**
-     * SaveDataToDb()
+//      * SaveDataToDb()
      //Specific to tablet. Removed for publication
-    SaveDataToDb: function () {
+//     SaveDataToDb: function () {
         isrcUtils.db.transaction(function (tx) {
             console.log('Saving data in DB');
             console.log('with uid: ' + isrcUtils.data.uid);
@@ -363,12 +368,12 @@ var isrcUtils = {
 
 
     /**
-     * SaveDataToFileDialog()
+//      * SaveDataToFileDialog()
      */
-    SaveDataToFileDialog: function () {
+//     SaveDataToFileDialog: function () {
         navigator.notification.confirm(
             'Do you want to export the data to a local json file?', // message
-            isrcUtils.SaveDataToFile, // callback to invoke with index of button pressed
+//             isrcUtils.SaveDataToFile, // callback to invoke with index of button pressed
             'Export data?', // title
             ['Yes', 'No'] // buttonLabels
         );
@@ -376,9 +381,9 @@ var isrcUtils = {
 
 
     /**
-     * SaveDataToFile()
+//      * SaveDataToFile()
      */
-    SaveDataToFile: function (buttonIndex) {
+//     SaveDataToFile: function (buttonIndex) {
 
         if (buttonIndex === 2) return;
 
@@ -423,7 +428,7 @@ var isrcUtils = {
                             },
                             function (fileEntry) {
                                 console.log("fileEntry is file?" + fileEntry.isFile.toString());
-                                isrcUtils.WriteJsonToFile(fileEntry, JSON.stringify(data));
+//                                 isrcUtils.WriteJsonToFile(fileEntry, JSON.stringify(data));
                             },
                             // write file error callback
                             function (evt, where) {
@@ -450,9 +455,9 @@ var isrcUtils = {
 
 
     /**
-     * WriteJsonToFile
+//      * WriteJsonToFile
      */
-    WriteJsonToFile: function (fileEntry, data) {
+//     WriteJsonToFile: function (fileEntry, data) {
         fileEntry.createWriter(function (writer) {
                 writer.onwriteend = function (evt) {
                     console.log("File successfully created!");
@@ -468,9 +473,9 @@ var isrcUtils = {
 
 
     /**
-     * DestroyDb()
+//      * DestroyDb()
      */
-    DestroyDb: function () {
+//     DestroyDb: function () {
         window.sqlitePlugin.deleteDatabase({
                 name: 'data.db',
                 location: 'default'
@@ -553,4 +558,3 @@ var isrcUtils = {
 
 
 }
-isrcUtils.initialize();
