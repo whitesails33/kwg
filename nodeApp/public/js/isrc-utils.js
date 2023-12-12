@@ -1,6 +1,7 @@
 /**
  * isrcUtils
  */
+console.log("isrcutils loaded")
 var isrcUtils = {
 
 
@@ -15,7 +16,6 @@ var isrcUtils = {
         'duration': 0,
         'date': null,
     },
-
 
 
 
@@ -50,42 +50,45 @@ var isrcUtils = {
         }
         var route = document.getElementById('rt-start');
         if (route) route.style.display = 'block';
-    
+
         // Routes buttons setup
         var buttons = document.querySelectorAll('button[data-href]');
         for (var i = 0; i < buttons.length; ++i) {
             buttons[i].addEventListener('click', isrcUtils.ButtonGoto);
         }
-    
+
         // Set counter
         if (localStorage.getItem("isrc-utils-counter") === null) {
             localStorage.setItem("isrc-utils-counter", 0);
-        }
-        else {
+        } else {
             var count = parseInt(localStorage.getItem("isrc-utils-counter"));
             localStorage.setItem("isrc-utils-counter", count + 1);
         }
     },
-    
 
     /**
      * SetHandlers()
      */
     SetHandlers: function () {
-        document.addEventListener('DOMContentLoaded', function() {
-            isrcUtils.buttons[0] = document.getElementById('btn-initial-form');
-            if (isrcUtils.buttons[0])
-                isrcUtils.buttons[0].addEventListener('click', isrcUtils.InitialFormSubmit);
-    
-            isrcUtils.buttons[1] = document.getElementById('btn-app-restart');
-            if (isrcUtils.buttons[1])
-                isrcUtils.buttons[1].addEventListener('click', isrcUtils.Restart);
-    
-            isrcUtils.buttons[2] = document.getElementById('stats-records');
-            if (isrcUtils.buttons[2])
-                isrcUtils.buttons[2].addEventListener('click', isrcUtils.SaveDataToFileDialog);
-        });
+        isrcUtils.buttons[0] = document.getElementById('btn-initial-form');
+        if (isrcUtils.buttons[0]) {
+            isrcUtils.buttons[0].addEventListener('click', isrcUtils.InitialFormSubmit);
+        }
+
+        isrcUtils.buttons[1] = document.getElementById('btn-app-restart');
+        if (isrcUtils.buttons[1]) {
+            isrcUtils.buttons[1].addEventListener('click', isrcUtils.Restart);
+        }
+
+        isrcUtils.buttons[2] = document.getElementById('stats-records');
+        if (isrcUtils.buttons[2]) {
+            isrcUtils.buttons[2].addEventListener('click', isrcUtils.SaveDataToFileDialog);
+        }
     },
+
+    // Other methods...
+
+
     
 
 
@@ -497,6 +500,10 @@ var isrcUtils = {
     },
     
 
+};
 
-}
-isrcUtils.initialize();
+// Call the Setup method to set up the initial state of your application.
+isrcUtils.Setup();
+
+// Call the SetHandlers method to set up event listeners.
+isrcUtils.SetHandlers();
