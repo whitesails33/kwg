@@ -137,7 +137,7 @@ function assignScenario() {
       environmentList[envOrder[i]] = initialEnvs[envOrder[i]];
     }
     //Advance the page
-    nexttrial();
+    nextTrial();
     clickStart('page1', 'page5');
   } else {
     alert("Fehlende Daten.") // remind to fill out all the data
@@ -153,38 +153,44 @@ function assignScenario() {
 var init = [];
 
 function instructioncheck() {
-  //check if correct answers are provided
+  // Check if correct answers are provided
+  var ch1 = 0, ch2 = 0, ch3 = 0;
+
   if (document.getElementById('q1b').checked) {
-    var ch1 = 1
+    ch1 = 1;
   }
+
   if (document.getElementById('q2c').checked) {
-    var ch2 = 1
+    ch2 = 1;
   }
+
   if (document.getElementById('q3d').checked) {
-    var ch3 = 1
+    ch3 = 1;
   }
-  //are all of the correct
+
+  // Check if all answers are correct
   var checksum = ch1 + ch2 + ch3;
+
   if (checksum === 3) {
-    //start game if instructions are checked correct
+    // Start the game if instructions are answered correctly
     clicks = 0;
     gridDeactivated = false;
-    nexttrial(); 
-    clickStart('page3', 'page5');
-  } 
-  else {
-    //if one or more answers are wrong, raise alert box
-    alert('Du hast einige Fragen falsch beantwortet. Bitte versuche es erneut');
+    nextTrial(); // Assuming there is a function called nextTrial
+    clickStart('page3', 'page5'); // Navigate to the game page
+  } else {
+    // If one or more answers are wrong, show an alert message
+    alert('You answered some questions incorrectly. Please try again.');
 
-    // And reset instructions and interactive demo
+    // Reset instructions and interactive demo
     trials = totalTrialsNumber - 1;
     instructionsCounter = 0;
-    //gridDeactivated = true;
+    //gridDeactivated = true; // Uncomment if needed
     document.getElementById("sidebarContent").style.display = "none";
     document.getElementById("sidebarInstructions").style.display = "block";
-    clickStart('page3', 'page5');
+    clickStart('page3', 'page5'); // Navigate back to the instruction page
   }
 }
+
 
 
 
@@ -210,7 +216,7 @@ function setButtonHandlers() {
     onButtonFinishPressed();
   });
   document.getElementById("nextTrialButton").addEventListener(clickEventType, function () {
-    nexttrial();
+    nextTrial();
   });
   document.getElementById("buttonGoToPageFive").addEventListener(clickEventType, function () {
     clickStart('page4', 'page5');
@@ -357,7 +363,7 @@ function onCellTapped(cell) {
 
   //update number of clicks left
   clicks = clicks - 1;
-  change("remaining2", "Verbleibende Klicks: <b>" + clicks + "</b>");
+  change("remaining2", "Remaining Clicks: <b>" + clicks + "</b>");
 
   //Update maximum reward found
   if (cell.rescaledValue > gridMax[trialCounter]) {
@@ -377,7 +383,7 @@ function onCellTapped(cell) {
   scoretotal[trialCounter] = scoretotal[trialCounter] + scorecurrent;
   reward = rewardCum(scoretotal);
   roundScore = performanceScore(scoretotal[trialCounter], scale[trialCounter]);
-  change('scoretotal', "Punktzahl: " + scoretotal[trialCounter]);
+  change('scoretotal', "Score: " + scoretotal[trialCounter]);
   
 
   
@@ -397,29 +403,29 @@ function onCellTapped(cell) {
   // CASE: out of investigations
   if (clicks == 0) {
     starRating = starsEarned(roundScore);
-    starArray[trialCounter] = parseFloat(starRating); //add to array
-    //move to next page
+    starArray[trialCounter] = parseFloat(starRating); // add to array
+    // move to the next page
     clickStart('page5', 'page5finished');
-    //update trials remaining
-
-    // last-1 trial (the one before bonus) just ended
+    // update trials remaining
+  
+    // The last-1 trial (the one before the bonus) just ended
     if (trials == 1) {
       document.getElementById("bonusIntroInstructions").style.display = "block";
       document.getElementById("bonusSidebarInstructions").style.display = "block";
       document.getElementById("sidebarContent").style.display = "none";
     }
-    
-
-    //calculate stars to award
+  
+    // calculate stars to award
     starDiv = "<div class=\"star-ratings-css\"><div class=\"star-ratings-css-top\" style=\"width: " + roundScore + "%\"></div><div class=\"star-ratings-css-bottom\"></div><br><br>"
     addToDiv("stars", starDiv)
-    //Compile completion text
-    var remainingMsg = (trials - 1) == 1 ? "weiteres Feld." : "weitere Felder.";
-    completionDiv = "<br><br><br><br><h1 class=\"text-xl\">Du hast dieses Feld erkundet und hast <b>" 
-      + starRating + " Sterne gesammelt</b>. Du hast noch " + (trials) + " " + remainingMsg + "</h1><br><br><br>" 
+    // Compile completion text
+    var remainingMsg = (trials - 1) == 1 ? "more field." : "more fields.";
+    completionDiv = "<br><br><br><br><h1 class=\"text-xl\">You have explored this field and earned <b>" 
+      + starRating + " stars</b>. You have " + (trials) + " " + remainingMsg + "</h1><br><br><br>" 
       + starDiv + "<br><br><br>";
     change("trials", completionDiv);
   }
+  
 
 
   // CASE: last trial AND 10 investigations remaining
@@ -434,16 +440,17 @@ function onCellTapped(cell) {
 
   // CASE: last trial AND out of investigations
   if (trials == 0 && clicks == 0) {
-      //Change button to move to completion page
-      document.getElementById("nextTrialButton").onclick = clickStart('page5finished', 'page6');
-      // Game over, calculate final score
-      GameOverScore = finalPerformance(scoretotal);
-      finalStarCount = totalStarsEarned(starArray);
-      //update page6 div
-      finalStarDiv = document.getElementById('stars').innerHTML;
-      completionDiv = "<h1 class=\"text-xl\">Wow! Das hast du super gemacht! Und du hast insgesamt ganze <b>" + finalStarCount + " Sterne gesammelt</b>! Vielen Dank fürs Spielen!</b> </h1>" + finalStarDiv + "";
-      change('thanksforcompleting', completionDiv);
+    // Change button to move to completion page
+    document.getElementById("nextTrialButton").onclick = clickStart('page5finished', 'page6');
+    // Game over, calculate final score
+    GameOverScore = finalPerformance(scoretotal);
+    finalStarCount = totalStarsEarned(starArray);
+    // Update page6 div
+    finalStarDiv = document.getElementById('stars').innerHTML;
+    completionDiv = "<h1 class=\"text-xl\">Wow! You did an amazing job! And you've collected a total of <b>" + finalStarCount + " stars</b>! Thank you for playing!</b> </h1>" + finalStarDiv + "";
+    change('thanksforcompleting', completionDiv);
   }
+  
 }
 
 
@@ -496,7 +503,7 @@ function saveBonusStep() {
   var rangeValue = range != null ? range.value : null;
 
   if (sicherValue == null || !sliderMoved || !confidenceSliderMoved) {
-    alert("Bitte gib Werte für beide Regler an.");
+    alert("Please provide values for both sliders.");
     return;
   }  
 
@@ -742,19 +749,19 @@ new Cell();
 
 
 
-function nexttrial() {
+function nextTrial() {
 
-  console.log("nexttrial called");
+  console.log("nextTrial called");
 
-  //proceed only if there are more trials available
+  // Proceed only if there are more trials available
 
   trials = trials - 1; // decrease remaining trials
-  console.log("[Debug] You have now " +trials+ " reamaining trials");
+  console.log("[Debug] You now have " + trials + " remaining trials");
 
   if (trials >= 0) {
-    initcollect[trialCounter] = init; //retrieve initially revealed tile from previous trial before updating trial counter
-    
-    //update trialCounter
+    initcollect[trialCounter] = init; // retrieve initially revealed tile from the previous trial before updating the trial counter
+
+    // update trialCounter
     trialCounter = trialCounter + 1;
 
     createGrid();
@@ -762,37 +769,38 @@ function nexttrial() {
     var firstCell = Cell.getRandomCell();
     firstCell.clicked();
 
-    //store initial values
+    // store initial values
     var d = new Date();
     tscollect[trialCounter][0] = d.getTime();
     xcollect[trialCounter][0] = firstCell.x;
     ycollect[trialCounter][0] = firstCell.y;
     zcollect[trialCounter][0] = firstCell.noiseyValue;
-    zcollectScaled[trialCounter][0] = firstCell.rescaledValue; //store noisey value
+    zcollectScaled[trialCounter][0] = firstCell.rescaledValue; // store noisy value
 
-    //update gridMax with initial tile
+    // update gridMax with the initial tile
     gridMax[trialCounter] = firstCell.rescaledValue;
     scoretotal[trialCounter] = firstCell.rescaledValue;
-    //Update text 
-    change('scoretotal', "Punktzahl: " + scoretotal[trialCounter]);
-    //go back to task
+    // Update text 
+    change('scoretotal', "Score: " + scoretotal[trialCounter]);
+    // go back to task
     clickStart('page5finished', 'page5');
-    //renew investigations
+    // renew investigations
     clicks = horizon;
-    //renew investigationIndex
+    // renew investigationIndex
     investigationIndex = 0;
-    //update current reward, number of trials and clicks
-    change("remaining1", "Verbleibende Spielfelder: <b>" + (trials + 1) + "</b>");
-    change("remaining2", "Verbleibende Klicks: <b>" + clicks + "</b>");
-    //if out of trials go to next page
+    // update current reward, the number of trials, and clicks
+    change("remaining1", "Remaining Game Fields: <b>" + (trials + 1) + "</b>");
+    change("remaining2", "Remaining Clicks: <b>" + clicks + "</b>");
+    // if out of trials, go to the next page
   }
 
   // If remaining trials < 0 --> game ended
   if (trials < 0) {
-    //move to final page
+    // move to the final page
     clickStart('page5', 'page6');
   }
 }
+
 
 function debugData() {
   console.log(tscollect);
@@ -910,11 +918,11 @@ function average(inputArray) {
 };
 
 //Convert cumulative score to reward value
-function rewardCum(scoreTotal) {
+function rewardCum(scoretotal) {
   var r = 0,
     r_i;
-  for (var i = 0; i < scoreTotal.length; i++) {
-    r_i = scoreTotal[i] / (scale[i] + 5) / 300 * 1.5;
+  for (var i = 0; i < scoretotal.length; i++) {
+    r_i = scoretotal[i] / (scale[i] + 5) / 300 * 1.5;
     r = r + r_i
   }
   if (r > 1.5) {
