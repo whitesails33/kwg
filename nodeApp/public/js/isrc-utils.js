@@ -284,187 +284,139 @@ var isrcUtils = {
 
     /**
      * GetStats()
-     */
-    GetStats: function () {
-        isrcUtils.db.transaction(function (tx) {
-            tx.executeSql('SELECT count(*) AS mycount FROM data', [], function (tx, res) {
-                if (res.rows.length > 0) {
-                    var records = res.rows.item(0).mycount;
-                    var statsRecords = document.getElementById('stats-records');
-                    if (statsRecords) statsRecords.innerHTML = 'Records in DB: ' + records;
-                }
-            }, function (error) {
-                console.log('SELECT SQL statement ERROR: ' + error.message);
-            });
-
-
-        }, function (error) {
-            console.log('Transaction ERROR: ' + error.message);
-        }, function () {
-
-        });
-    },
+     */GetStats: function () {
+    fetch('/api/get-stats')  // Replace with your actual API endpoint
+    .then(response => response.json())
+    .then(data => {
+        var records = data.records;  // Assuming 'records' is returned from the API
+        var statsRecords = document.getElementById('stats-records');
+        if (statsRecords) statsRecords.innerHTML = 'Records in DB: ' + records;
+    })
+    .catch(error => {
+        console.log('Error fetching stats:', error);
+    });
+},
 
 
     /**
      * DebugData()
      * Debugs data from DB in js console
-     */
-    DebugData: function () {
-        console.log('# Debug data');
-        var arr = [];
-        isrcUtils.db.executeSql('SELECT * FROM data', [], function (res) {
-            if (res.rows.length > 0) {
-                for (var i = res.rows.length - 1; i >= 0; i--) {
-                    arr.push(res.rows.item(i));
-                }
-            }
+     */DebugData: function () {
+    console.log('# Debug data');
+
+    fetch('/api/debug-data')  // Replace with your actual API endpoint
+        .then(response => response.json())
+        .then(data => {
             console.log('[DEBUG] DATA FROM DB:');
-            //console.log(arr);
-            for (var i = 0; i <= arr.length; i++) {
-                console.log('#### uid: ' + arr[i].uid + ' on date: ' + arr[i].date + ' ####');
-                console.log(JSON.parse(arr[i].data));
-            }
-        }, function (error) {
-            console.log('SELECT SQL statement ERROR: ' + error.message);
+            data.forEach(item => {
+                console.log('#### uid: ' + item.uid + ' on date: ' + item.date + ' ####');
+                console.log(item.data);  // Assuming 'data' is the property name in your response
+            });
+        })
+        .catch(error => {
+            console.log('Error fetching debug data:', error);
         });
-    },
+},
 
 
     /**
      * SaveDataOnline()
-     */
-    SaveDataOnline: function () {
-        isrcUtils.db.executeSql('SELECT * FROM data', [], function (res) {
-            console.log('[ONLINE SAVE DATA]');
-            if (res.rows.length > 0) {
-                var records = [];
+     */SaveDataOnline: function () {
+    fetch('/api/get-data-for-online-save')  // Replace with your actual API endpoint
+    .then(response => response.json())
+    .then(data => {
+        console.log('[ONLINE SAVE DATA]');
+        if (data.length > 0) {
+            // Assuming 'data' is an array of records
+            var records = data.map(item => ({
+                'date': item.date,
+                'uid': item.uid,
+                'data': item.data  // Assuming data is already parsed JSON
+            }));
 
-                for (var i = res.rows.length - 1; i >= 0; i--) {
-                    records.push({
-                        'date': res.rows.item(i).date,
-                        'uid': res.rows.item(i).uid,
-                        'data': JSON.parse(res.rows.item(i).data)
-                    });
-                    //console.log(records[i]);
-                }
+            // Post to external server
+            isrcUtils.Post("https://isearch.raimaj.me/ogisrcUtils/savedata.php", {
+                data: JSON.stringify(records)
+            });
+        }
+    })
+    .catch(error => {
+        console.log('Error fetching data for online save:', error);
+    });
+},
 
-                isrcUtils.Post("https://isearch.raimaj.me/ogisrcUtils/savedata.php", {
-                    data: JSON.stringify(records)
-                });
-
-            }
-
-        }, function (error) {
-            console.log('SELECT SQL statement ERROR: ' + error.message);
-        });
-
-    },
 
 
     /**
      * SaveDataToFileDialog()
      */
     SaveDataToFileDialog: function () {
-        navigator.notification.confirm(
-            'Do you want to export the data to a local json file?', // message
-            isrcUtils.SaveDataToFile, // callback to invoke with index of button pressed
-            'Export data?', // title
-            ['Yes', 'No'] // buttonLabels
-        );
+        var userResponse = confirm('Do you want to export the data to a local json file?'); // Standard web confirm dialog
+        if (userResponse) {
+            isrcUtils.SaveDataToFile(); // Call SaveDataToFile if user confirms
+        }
     },
+    
 
 
     /**
      * SaveDataToFile()
      */
-    SaveDataToFile: function (buttonIndex) {
-
-        if (buttonIndex === 2) return;
-
-        isrcUtils.db.executeSql('SELECT * FROM data', [], function (res) {
-
-            if (res.rows.length > 0) {
-                var records = [];
-
-                //for (var i = 0; i < res.rows.length; i++) {
-                //for (var i = res.rows.length - 1; i >= 0; i--) {
-                for (var i = 0; i < res.rows.length; i++) {
-                    records.push({
-                        'date': res.rows.item(i).date,
-                        'uid': res.rows.item(i).uid,
-                        'data': JSON.parse(res.rows.item(i).data)
-                    });
-                    //console.log(records[i]);
-                }
-
-                // preapre data to write in file
-                data = {
+    SaveDataToFile: function () {
+        fetch('/api/get-data-for-file')  // Replace with your actual API endpoint
+            .then(response => response.json())
+            .then(data => {
+                // Assuming 'data' is an array of records
+                var records = data.map(item => ({
+                    'date': item.date,
+                    'uid': item.uid,
+                    'data': item.data // Assuming data is already parsed JSON
+                }));
+    
+                // Prepare data to write in file
+                var fileData = {
                     "count": records.length,
                     "records": records
                 };
-
-                // build results file name
-                var currentdate = new Date();
-                var day = ("0" + currentdate.getDate()).slice(-2);
-                var month = ("0" + (currentdate.getMonth() + 1)).slice(-2);
-                var filename = "data-" + day + month + currentdate.getFullYear() + "-" + currentdate.getHours() + currentdate.getMinutes() + ".json";
-                console.log(filename);
-
-
-                // access file system
-                window.resolveLocalFileSystemURL(cordova.file.externalDataDirectory,
-                    function (fs) {
-
-                        // get or create results file
-                        fs.getFile(filename, {
-                                create: true,
-                                exclusive: false
-                            },
-                            function (fileEntry) {
-                                console.log("fileEntry is file?" + fileEntry.isFile.toString());
-                                isrcUtils.WriteJsonToFile(fileEntry, JSON.stringify(data));
-                            },
-                            // write file error callback
-                            function (evt, where) {
-                                console.log("getFile error: " + where + " :");
-                                console.log(JSON.stringify(evt));
-                            }
-                        );
-
-                    },
-                    // filesystem error callback
-                    function (evt, where) {
-                        console.log("Resolve filesystem error: " + where + " :");
-                        console.log(JSON.stringify(evt));
-                    }
-                );
-            }
-
-            // SQL error callback
-        }, function (error) {
-            console.log('SELECT SQL statement ERROR: ' + error.message);
-        });
-
+    
+                // Create a downloadable file
+                var blob = new Blob([JSON.stringify(fileData)], { type: "application/json" });
+                var url = URL.createObjectURL(blob);
+    
+                // Trigger file download
+                var a = document.createElement("a");
+                a.href = url;
+                a.download = 'data.json'; // You can format the filename as needed
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            })
+            .catch(error => {
+                console.log('Error fetching data for file:', error);
+            });
     },
+    
 
 
     /**
      * WriteJsonToFile
      */
-    WriteJsonToFile: function (fileEntry, data) {
-        fileEntry.createWriter(function (writer) {
-                writer.onwriteend = function (evt) {
-                    console.log("File successfully created!");
-                };
-                writer.write(data);
-            },
-            function (evt, where) {
-                console.log("Error writing file " + where + " :");
-                console.log(JSON.stringify(evt));
-            }
-        );
+    WriteJsonToFile: function (filename, data) {
+        // Create a Blob from the data
+        var blob = new Blob([data], { type: "application/json" });
+        var url = URL.createObjectURL(blob);
+    
+        // Trigger file download
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = filename; // Use the provided filename
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
     },
+    
 
 
     /**
@@ -538,18 +490,12 @@ var isrcUtils = {
      * RequestConfirmation()
      */
     RequestConfirmation: function (handlerFunction, evt) {
-        var event = evt;
-        var handler = handlerFunction;
-        navigator.notification.confirm(
-            'Bist du sicher?',
-            function (buttonIndex) {
-                if (buttonIndex === 2) return;
-                return handler(evt);
-            },
-            'Bestätigen',
-            ['ja', 'nein'] 
-        );
+        var userConfirmed = confirm('Bist du sicher?'); // Standard web confirm dialog
+        if (userConfirmed) {
+            handlerFunction(evt); // Call the handler function if the user confirms
+        }
     },
+    
 
 
 }
