@@ -4,7 +4,7 @@
   "description": "Searching for rewards like a child means less generalization and more directed exploration",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node server.js"
 
   },
   "author": "Vasanth",
