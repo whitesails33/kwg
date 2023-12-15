@@ -266,8 +266,7 @@ var isrcUtils = {
     },
 
 
-    /**
-     * SaveDataToDb()
+
      //Specific to tablet. Removed for publication
     SaveDataToDb: function () {
         isrcUtils.db.transaction(function (tx) {
@@ -282,7 +281,7 @@ var isrcUtils = {
             if (debugOut) debugOut.innerHTML = debugOut.innerHTML + '<br><span style="color:red">DATA SAVED IN THE DATABASE</span>'
         });
     },
-    */
+
 
 
     /**
