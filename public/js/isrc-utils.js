@@ -1,6 +1,9 @@
 /**
  * isrcUtils
  */
+// var sql = require('mssql');
+
+
 console.log("isrcutils loaded")
 var isrcUtils = {
 
@@ -17,7 +20,16 @@ var isrcUtils = {
         'date': null,
     },
 
-
+    dbConfig: {
+        user: 'vasanth009@e.ntu.edu.sg',
+        password: 't^W^ih3NA8gaE8SMy',
+        server: 'clicdb.database.windows.net',
+        database: 'clicdb',
+        options: {
+            encrypt: true, // Necessary for Azure SQL
+            trustServerCertificate: false // Change to true if on a local environment
+        }
+    },
 
 
 
@@ -106,26 +118,17 @@ var isrcUtils = {
 	// },
 
 
-    /**
-     * SetupDb()
-    //Specific to tablet. Removed for publication
-    SetupDb: function () {
+    // SetupDb: async function() {
+    //     try {
+    //         let pool = await sql.connect(this.dbConfig);
+    //         await pool.request().query('CREATE TABLE IF NOT EXISTS data (date DATETIME, uid INT, data NVARCHAR(MAX))');
+    //         console.log('Created database table OK');
+    //         isrcUtils.GetStats(); // Adjust or remove according to your needs
+    //     } catch (error) {
+    //         console.log('Error setting up the database:', error);
+    //     }
+    // },
 
-        isrcUtils.db = window.sqlitePlugin.openDatabase({
-            name: 'data.db',
-            location: 'default'
-        });
-
-        isrcUtils.db.transaction(function (tx) {
-            tx.executeSql('CREATE TABLE IF NOT EXISTS data (date, uid, data)');
-        }, function (error) {
-            console.log('Transaction ERROR: ' + error.message);
-        }, function () {
-            console.log('Created database table OK');
-            isrcUtils.GetStats();
-        });
-    },
-     */
 
 
     /**
@@ -266,21 +269,21 @@ var isrcUtils = {
     },
 
 
-
      //Specific to tablet. Removed for publication
-    SaveDataToDb: function () {
-        isrcUtils.db.transaction(function (tx) {
-            console.log('Saving data in DB');
-            console.log('with uid: ' + isrcUtils.data.uid);
-            tx.executeSql('INSERT INTO data VALUES (DateTime(\'now\'), ?,?)', [isrcUtils.data.uid, JSON.stringify(isrcUtils.data)]);
-        }, function (error) {
-            console.log('Transaction ERROR: ' + error.message);
-        }, function () {
-            console.log('Inserted final data in DB');
-            var debugOut = document.getElementById('debug-out');
-            if (debugOut) debugOut.innerHTML = debugOut.innerHTML + '<br><span style="color:red">DATA SAVED IN THE DATABASE</span>'
-        });
+     SaveDataToDb: async function() {
+        console.log("body",JSON.stringify(isrcUtils.data))
+        fetch('/submit-data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(isrcUtils.data),
+        })
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch((error) => console.error('Error:', error));
     },
+    
 
 
 
@@ -323,29 +326,30 @@ var isrcUtils = {
 
     /**
      * SaveDataOnline()
-     */SaveDataOnline: function () {
-    fetch('/api/get-data-for-online-save')  // Replace with your actual API endpoint
-    .then(response => response.json())
-    .then(data => {
-        console.log('[ONLINE SAVE DATA]');
-        if (data.length > 0) {
-            // Assuming 'data' is an array of records
-            var records = data.map(item => ({
-                'date': item.date,
-                'uid': item.uid,
-                'data': item.data  // Assuming data is already parsed JSON
-            }));
+     */
+    // SaveDataOnline: function () {
+//     fetch('/api/get-data-for-online-save')  // Replace with your actual API endpoint
+//     .then(response => response.json())
+//     .then(data => {
+//         console.log('[ONLINE SAVE DATA]');
+//         if (data.length > 0) {
+//             // Assuming 'data' is an array of records
+//             var records = data.map(item => ({
+//                 'date': item.date,
+//                 'uid': item.uid,
+//                 'data': item.data  // Assuming data is already parsed JSON
+//             }));
 
-            // Post to external server
-            isrcUtils.Post("https://isearch.raimaj.me/ogisrcUtils/savedata.php", {
-                data: JSON.stringify(records)
-            });
-        }
-    })
-    .catch(error => {
-        console.log('Error fetching data for online save:', error);
-    });
-},
+//             // Post to external server
+//             isrcUtils.Post("https://isearch.raimaj.me/ogisrcUtils/savedata.php", {
+//                 data: JSON.stringify(records)
+//             });
+//         }
+//     })
+//     .catch(error => {
+//         console.log('Error fetching data for online save:', error);
+//     });
+// },
 
 
 
@@ -506,3 +510,6 @@ isrcUtils.Setup();
 
 // Call the SetHandlers method to set up event listeners.
 isrcUtils.SetHandlers();
+
+// make a code that prints hello in to console 
+// isrcUtils.SetupDb();
