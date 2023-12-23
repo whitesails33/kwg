@@ -20,20 +20,6 @@ var isrcUtils = {
         'date': null,
     },
 
-    dbConfig: {
-        user: 'vasanth009@e.ntu.edu.sg',
-        password: 't^W^ih3NA8gaE8SMy',
-        server: 'clicdb.database.windows.net',
-        database: 'clicdb',
-        options: {
-            encrypt: true, // Necessary for Azure SQL
-            trustServerCertificate: false // Change to true if on a local environment
-        }
-    },
-
-
-
-
 
     /**
      * Cordova: receivedEvent()
