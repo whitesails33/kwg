@@ -255,7 +255,7 @@ var isrcUtils = {
     SaveData: function() {
 
         var currentTimeStamp = new Date();
-        isrcUtils.data.date = currentTimeStamp;
+        // isrcUtils.data.date = currentTimeStamp;
         isrcUtils.data.duration = (currentTimeStamp - isrcUtils.initialTimeStamp) / 1000;
        
 
@@ -271,6 +271,8 @@ var isrcUtils = {
 
      //Specific to tablet. Removed for publication
      SaveDataToDb: async function() {
+
+
         console.log("body",JSON.stringify(isrcUtils.data))
         fetch('/submit-data', {
             method: 'POST',

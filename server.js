@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const app = express(); 
+const bodyParser = require('body-parser');
 require('dotenv').config();
 var sql = require('mssql');
 var test = "bro";
@@ -8,6 +9,8 @@ const port = process.env.PORT || 3000;
 
 // Serve static files (e.g., HTML, CSS, JS) from a 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const dbConfig = {
   user: 'gridgame',
@@ -45,18 +48,32 @@ app.listen(port, () => {
 
 app.post('/submit-data', async (req, res) => {
   const data = req.body;
+  console.log("data is here", data)
   // Example: Insert data into the database
   try {
       // Assuming `db` is your database connection and `insertData` is a function to insert data
       try {
         let pool = await sql.connect(dbConfig);
-        let query = `INSERT INTO data (date, uid, data) VALUES (@date, @uid, @data)`;
-        console.log(data)
+        let query = `INSERT INTO GridGame (UID, Duration, Date, Condition, Scale, EnvOrder, SearchHistory, BonusLevel, StarArray, Age, Gender, Grade, TesterNotes) 
+        VALUES (@uid, @duration, @date, @condition, @scale, @envOrder, @searchHistory, @bonusLevel, @starArray, @age, @gender, @grade, @testerNotes)`;
+        data.date = new Date();
+        
+        console.log(data.uid, "data exists")
         await pool.request()
-            .input('date', sql.DateTime, new Date())
-            .input('uid', sql.Int, data.uid)
-            .input('data', sql.NVarChar(sql.MAX), JSON.stringify(data))
-            .query(query);
+      .input('uid', sql.Int, data.uid)
+      .input('duration', sql.Float, data.duration)
+      .input('date', sql.DateTime, new Date(data.date))
+      .input('condition', sql.Int, data.condition)
+      .input('scale', sql.NVarChar(sql.MAX), JSON.stringify(data.scale))
+      .input('envOrder', sql.NVarChar(sql.MAX), JSON.stringify(data.envOrder))
+      .input('searchHistory', sql.NVarChar(sql.MAX), JSON.stringify(data.searchHistory))
+      .input('bonusLevel', sql.NVarChar(sql.MAX), JSON.stringify(data.bonusLevel))
+      .input('starArray', sql.NVarChar(sql.MAX), JSON.stringify(data.starArray))
+      .input('age', sql.Int, data.age)
+      .input('gender', sql.NVarChar(50), data.gender)
+      .input('grade', sql.Int, data.grade)
+      .input('testerNotes', sql.NVarChar(sql.MAX), JSON.stringify(data.testerNotes))
+      .query(query);
     
         console.log('Inserted final data in DB');
         var debugOut = document.getElementById('debug-out');
