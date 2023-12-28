@@ -7,7 +7,14 @@
 }
 
 #uid-input {
-  font-size: 4vw; /* Adjust the value as needed for your design */
+  font-size: 3vw; /* Adjust the value as needed for your design */
+  max-width: 170px;
+  /* justify-content: center; */
+}
+
+.initial-form {
+  justify-content: center;
+
 }
 
 .text-l {
@@ -154,6 +161,11 @@ a.bt {
   a.bt {
     display: block;
     padding: 0;
+  }
+  #uid-input {
+    font-size: 4vw; /* Adjust the value as needed for your design */
+    max-width: 170px;
+    /* justify-content: center; */
   }
 }
 @media only screen and (min-width: 600px) {
