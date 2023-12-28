@@ -194,7 +194,32 @@ a.bt {
   width: 326px;
 }
 }
-
+@media only screen and (min-width: 1000px) {
+  .text-xl {
+      font-size: 26px; /* or your preferred size */
+  }
+  .text-l {
+      font-size: 19px; /* or your preferred size */
+  }
+  .grid td {
+    width: 100px ; /* or use a percentage */
+    height: 100px ; /* same as width to maintain a square */
+    min-width: 30px ;
+    max-width: 90px ;
+    min-height: 30px ;
+    max-height: 90px ;
+    border: 3px solid lightgrey;
+    font-size: 3vw;
+    color: black;
+    background-color: white;
+    text-align: center;
+  }
+  #progress {
+  float: left;
+  margin-left: 45px;
+  width: 326px;
+}
+}
 /* For smaller screens */
 @media only screen and (max-width: 599px) {
   .text-xl {
