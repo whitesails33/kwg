@@ -46,6 +46,18 @@ app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
 
+// Define route for /sm
+app.get('/sm', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/index.html'));
+});
+
+// Serve the index.html file with condition query parameter for /rg
+app.get('/rg', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/index.html'));
+});
+
+
+
 app.post('/submit-data', async (req, res) => {
   const data = req.body;
   console.log("data is here", data)
@@ -54,8 +66,8 @@ app.post('/submit-data', async (req, res) => {
       // Assuming `db` is your database connection and `insertData` is a function to insert data
       try {
         let pool = await sql.connect(dbConfig);
-        let query = `INSERT INTO GridGame (UID, Duration, Date, Condition, Scale, EnvOrder, SearchHistory, BonusLevel, StarArray, Age, Gender, Grade, TesterNotes) 
-        VALUES (@uid, @duration, @date, @condition, @scale, @envOrder, @searchHistory, @bonusLevel, @starArray, @age, @gender, @grade, @testerNotes)`;
+        let query = `INSERT INTO GridGame (UID, Duration, Date, Condition, Scale, EnvOrder, SearchHistory, BonusLevel, StarArray, TesterNotes) 
+        VALUES (@uid, @duration, @date, @condition, @scale, @envOrder, @searchHistory, @bonusLevel, @starArray, @testerNotes)`;
         data.date = new Date();
         
         console.log(data.uid, "data exists")
@@ -69,9 +81,6 @@ app.post('/submit-data', async (req, res) => {
       .input('searchHistory', sql.NVarChar(sql.MAX), JSON.stringify(data.searchHistory))
       .input('bonusLevel', sql.NVarChar(sql.MAX), JSON.stringify(data.bonusLevel))
       .input('starArray', sql.NVarChar(sql.MAX), JSON.stringify(data.starArray))
-      .input('age', sql.Int, data.age)
-      .input('gender', sql.NVarChar(50), data.gender)
-      .input('grade', sql.Int, data.grade)
       .input('testerNotes', sql.NVarChar(sql.MAX), JSON.stringify(data.testerNotes))
       .query(query);
     

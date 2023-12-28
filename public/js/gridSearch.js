@@ -94,33 +94,25 @@ var condition,
 //Access the MySQL database and returns scenario id with a condition numnber, adding the now() date time to the start time field and marking the specific scenario as completed
 function assignScenario() {
   //Extract gender and birthdate
-  if (document.getElementById('Male').checked) {
-    gender = "Male";
-  }
-  if (document.getElementById('Female').checked) {
-    gender = "Female";
-  }
+  // if (document.getElementById('Male').checked) {
+  //   gender = "Male";
+  // }
+  // if (document.getElementById('Female').checked) {
+  //   gender = "Female";
+  // }
 
-  var dob = document.getElementById('birthDate').value;
-  grade = parseInt(document.getElementById('gradeSelect').value);
+  // var dob = document.getElementById('birthDate').value;
+  // grade = parseInt(document.getElementById('gradeSelect').value
+  
 
 
   //Check if any data missing
-  var checksum = (typeof (gender) !== 'undefined') && dob != null && dob != "";
+  console.log(condition)
+  document.getElementById("topbar").textContent = "condition "+ Number(condition)
+  var checksum =true;
   if (checksum) {
 
-    age = getAge(dob);
 
-    var counter = 0;
-    if (age <= 9) {
-      counter = getCounter("gridsearch-counter-1");
-    } else if (age > 9 && age < 18) {
-      counter = getCounter("gridsearch-counter-2");
-    } else if (age > 18) {
-      counter = getCounter("gridsearch-counter-3");
-    }
-
-    condition = counter % 2;
     //condition=Math.round(Math.random())
     clicks = horizon; //set initial number of clicks to horizon
     //var kernelFiles = ['kernelSmooth.json', 'kernelRough.json', 'kernelMed.json'];
@@ -140,7 +132,7 @@ function assignScenario() {
     nextTrial();
     clickStart('page1', 'page5');
   } else {
-    alert("Fehlende Daten.") // remind to fill out all the data
+    alert("Missing data.") // remind to fill out all the data
   }
 
   setButtonHandlers();
@@ -188,6 +180,9 @@ function instructioncheck() {
     document.getElementById("sidebarContent").style.display = "none";
     document.getElementById("sidebarInstructions").style.display = "block";
     clickStart('page3', 'page5'); // Navigate back to the instruction page
+    onButtonInstructionsPressed();
+    onButtonInstructionsPressed();
+    onButtonInstructionsPressed();
   }
 }
 
@@ -197,9 +192,14 @@ function instructioncheck() {
 /**
  * onDocumentReady
  */
-document.addEventListener("DOMContentLoaded", function (event) {
-  document.getElementById("buttonAssignScenario").addEventListener("click", function () {
-    assignScenario();
+ document.addEventListener("DOMContentLoaded", function (event) {
+  document.getElementById("btn-initial-form").addEventListener("click", function () {
+    var uidInput = document.getElementById("uid-input").value;
+    if (uidInput.trim() !== "") {
+      assignScenario();
+    } else {
+      alert("Please enter a UID."); // or handle this case as you see fit
+    }
   });
 });
 
@@ -298,7 +298,7 @@ var gridDeactivated = true;
  * @param {*} evt 
  */
 function onButtonInstructionsPressed(evt) {
-
+  // console.log("continue button is pressed this is evt",evt)
   if (instructionsCounter == 0) {
     // go to insturctions 2nd page
     document.getElementById("sidebarInstructions-1").style.display = "none";
@@ -309,7 +309,7 @@ function onButtonInstructionsPressed(evt) {
 
   else if (instructionsCounter == 1) {
     if (clicks > 0) {
-      alert("Bitte benutze alle 25 Klicks um das Spielfeld zu erkunden.");
+      alert("Please use all the 25 clicks of this round to explore the field.");
       return;
     }
     gridDeactivated = true;
@@ -557,7 +557,7 @@ function onBonusCellTapped(cell) {
 
   if (bonusCells.indexOf(cell) == -1 || bonusLevelStep <= 4) return;
 
-  var r = confirm("Bist du dir sicher?");
+  var r = confirm("Are you sure?");
   if (!r) return;
 
   document.getElementById("bonusSidebarInstructions").style.display = "none";
