@@ -6,6 +6,9 @@
   font-size: 18px;
 }
 
+#uid-input {
+  font-size: 4vw; /* Adjust the value as needed for your design */
+}
 
 .text-l {
   font-size: 19px;
