@@ -4,8 +4,10 @@ const app = express();
 const bodyParser = require('body-parser');
 require('dotenv').config();
 var sql = require('mssql');
-var test = "bro";
+// var test = "bro";
 const port = process.env.PORT || 3000;
+
+console.log(process.env.password ,process.env.server )
 
 // Serve static files (e.g., HTML, CSS, JS) from a 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
@@ -14,8 +16,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const dbConfig = {
   user: 'gridgame',
-  password: 'PG9sTJ6G7tCte8',
-  server: 'clic.database.windows.net',
+  password: process.env.password,
+  server: process.env.server,
   database: 'clic',
   port: 1433,
   options: {
