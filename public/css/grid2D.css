@@ -193,6 +193,11 @@ a.bt {
   margin-left: 45px;
   width: 326px;
 }
+#uid-input {
+  font-size: 23px; /* Adjust the value as needed for your design */
+  max-width: 170px;
+  /* justify-content: center; */
+}
 }
 @media only screen and (min-width: 1000px) {
   .text-xl {
