@@ -7,7 +7,7 @@ var sql = require('mssql');
 // var test = "bro";
 const port = process.env.PORT || 3000;
 
-console.log(process.env.password ,process.env.server )
+// console.log(process.env.password ,process.env.server )
 
 // Serve static files (e.g., HTML, CSS, JS) from a 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
