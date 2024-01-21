@@ -542,7 +542,9 @@ After that, you will see some questions, and then you can continue playing as us
           condition = 0;
         } else {
           // Default value or error handling
-          condition = 0; // or any other default or error action
+          condition = Math.round(Math.random());
+          condition == 0 ? console.log("smooth") : console.log("rough");
+           // or any other default or error action
         }
         console.log("Condition set to:", condition);
       </script>

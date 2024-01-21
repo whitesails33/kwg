@@ -62,6 +62,9 @@ Replace username, password, server.database.windows.net, and DB with your actual
 - `GET /`: Serves the game interface with an random condition.
 - `POST /submit-data`: Endpoint to submit game data to the database.
 
+## Condition modification.
+Modification of condition can be done by changing the `kernalRough.json` and `kernalSmooth.json file`
+
 ## Database Configuration
 The application connects to a SQL database using configurations defined in `server.js`. Ensure that the SQL Server is running and accessible. The database schema should match the expectations in the `submit-data` endpoint.
 
