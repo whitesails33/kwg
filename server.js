@@ -26,23 +26,6 @@ const dbConfig = {
   }
 }
 
-
-  // try {
-  //     let pool = sql.connect(dbConfig);
-  //      pool.request().query('CREATE TABLE IF NOT EXISTS data (date DATETIME, uid INT, data NVARCHAR(MAX))');
-  //     console.log('Created database table OK');
-  //     isrcUtils.GetStats(); // Adjust or remove according to your needs
-  // } catch (error) {
-  //     console.log('Error setting up the database:', error);
-  // }
-
-  
-
-// Serve the index.html file when a GET request is made to the root URL
-// app.get('/', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'index.html'));
-// });
-
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
@@ -86,15 +69,15 @@ app.post('/submit-data', async (req, res) => {
       .input('testerNotes', sql.NVarChar(sql.MAX), JSON.stringify(data.testerNotes))
       .query(query);
     
-        console.log('Inserted final data in DB');
+        // console.log('Inserted final data in DB');
         var debugOut = document.getElementById('debug-out');
         if (debugOut) debugOut.innerHTML = debugOut.innerHTML + '<br><span style="color:red">DATA SAVED IN THE DATABASE</span>';
     } catch (error) {
-        console.log('Error saving data to DB:', error);
+        // console.log('Error saving data to DB:', error);
     }
       res.send({ status: 'Data successfully saved' });
   } catch (error) {
-      console.error('Database error:', error);
+      // console.error('Database error:', error);
       res.status(500).send({ status: 'Error saving data' });
   }
 });

@@ -1,70 +1,74 @@
 # Kids with grids
 ####  Repository for "Searching for rewards like a child means less generalization and more directed exploration"
-####  Schulz, Wu, Ruggeri and Meder (Psychological Science, 2019)
-####  We highlight the most important parts of each folder below
+####  originally adopted from Schulz, Wu, Ruggeri and Meder (Psychological Science, 2019)
+####  code migration by Vasanth (NTU Center for Lifelong Learning and Individualised Cognition(CLIC), 2024)
 
-## A: Walk-throughs
+#### Brief readme below on how to deploy and basic working principles.
 
-<a name="walkthroughs"></a>
-- [1](#walkthroughs) **Behavioral Results**: Walks you through all of the reported behavioral results, i.e. every single test reported in our paper, including effect sizes and Bayes Factors.
 
-<a name="walkthroughs"></a>
-- [2](#walkthroughs) **Bonus round results**: Walks you through the reported bonus round results, i.e. all of the tests reported in our paper concerning the 10 round including effect sizes and Bayes Factors.
+## Description
+This Node.js application is a web-based GridSearch game, originally designed for Cordova but now rewritten for a Node.js environment. The game presents users with various tasks and challenges related to grid-based exploration and decision-making. The application is built with Express.js and integrates with a SQL database for data persistence.
 
-<a name="walkthroughs"></a>
-- [3](#walkthroughs) **Modeling results**: Walks you through the reported modeling results, i.e. all of the tests reported in our paper concerning the modeling and parameter estimate results including effect sizes and Bayes Factors.
+## Features
+- Web-based interface for playing the GridSearch game.
+- Server-side logic written in Node.js using Express.js.
+- Database integration using `mssql` for storing game data.
+- Responsive web design for various devices and screen sizes using bootstrap(although it could be more responsive).
 
-## B: Data
+## Installation
+### Prerequisites
+- Node.js (latest stable version recommended)
+- SQL Server (for database functionality)
 
-<a name="data"></a>
-- [1](#data)  **Full data**: This is the raw data of all participants. We use the same data set but named "kwgdata.csv" in all of our analyses. Both data sets can be found in this folder.
+### Steps to Install
+1. Clone the repository: `git clone https://github.com/vasanthsreeram/kwg`
+2. Navigate to the project directory: `cd kwg`
+3. Install dependencies: `npm install`
 
-<a name="data"></a>
-- [2](#data)  **Model data**: This is the data, both the predictive accuracy and parameter estimates, for the GP-UCB model. We use the same data set but named "rbfucb.csv" in all of our analyses. Both data sets can be found in this folder.
+## Configuration
+### .env File
+Create a `.env` file in the root directory of your project. Add the following environment-specific variables on new lines in the form of `NAME=VALUE`:
+```plaintext
+DB_USER=username
+PASSWORD=password
+SERVER=server.database.windows.net
+DB_DATABASE=DB
+```
+Replace username, password, server.database.windows.net, and DB with your actual database credentials.
 
-<a name="data"></a>
-- [3](#data)  **Learning curves data**: This is the data for the simulated learning curves. We use the same data set but named "learningcurves.csv" in all of our analyses. Both data sets can be found in this folder.
+## Running the Application
+1. Set environment variables for database access in `.env` file: `password` and `server`.
+2. Start the server: `npm start`
+3. Access the application at `http://localhost:3000`.
 
-## C: Code
+## Application Structure
+- `server.js`: The main server file that sets up the Express application, routes, and database connection.
+- `public/`: Contains static files like HTML, CSS, and JavaScript for the client-side.
+- `index.html`: The main HTML file for the game interface.
 
-<a name="code"></a>
-- [1](#code) **Behavioral tests**: This contains all of the behavioral tests performed in our manuscript, including effect sizes and Bayes factors.
-   
-<a name="code"></a>
-- [2](#code) **Bonus round tests**: This contains all of the bonus round tests performed in our manuscript, including effect sizes and Bayes factors.
+## JavaScript Files in /public
+- `gridSearch.js`: Manages the game logic, including grid generation, score tracking, and user interactions within the GridSearch game.
+- `isrc-utils.js`: Contains utility functions and handlers, facilitating operations like data saving, routing between different parts of the application, and preloading images for a smoother user experience.
+- `stimuli.js`: Responsible for managing and presenting different stimuli in the game, handling user responses, and navigating through the different stages of the game.
 
-<a name="code"></a>
-- [3](#code) **Model comparison**: This contains all of the model comparisons performed in our manuscript, including effect sizes and Bayes factors.
+## API Endpoints
+- `GET /sm`: Serves the game interface with smooth condition.
+- `GET /rg`: Serves the game interface with an rough condition.
+- `GET /`: Serves the game interface with an random condition.
+- `POST /submit-data`: Endpoint to submit game data to the database.
 
-<a name="code"></a>
-- [4](#code) **Cross validation**: This contains the full cross validation code to compare all of the models based on there leave-one-round-out cross validation error. `NOTE:` You will need a cluster to run this, because it will otherwise take too long.
+## Database Configuration
+The application connects to a SQL database using configurations defined in `server.js`. Ensure that the SQL Server is running and accessible. The database schema should match the expectations in the `submit-data` endpoint.
 
-<a name="code"></a>
-- [5](#code) **Models**:This contains the code for all the learning models and sampling strategies applied in our manuscript and SI.
+## Deployment
+### Deploying to a Cloud Platform (e.g., Heroku, AWS, Azure)
+1. Set up an account on your chosen cloud platform.
+2. Deploy the Node.js application following the platform's guidelines.
+3. Ensure the environment variables for database access are correctly set in the cloud platform's configuration.
+4. Access the deployed application through the provided URL.
 
-## D: Plots
 
-<a name="plots"></a>
-- [1](#plots) **Main plot**: Figure 1 in our manuscript, showing all behavioral and modeling results.
-   
-<a name="plots"></a>
-- [2](#plots) **Bonus plot**: Figure 2 in our manuscript, showing the bonus round results.
- 
-## E. Experiment
-1. Install cordova: `npm install -g cordova`
-2. Navigate to `~/E_Experiment/www/` and add browser to the cordova environment: `cordova platform add browser`
-3. run the experiment: `cordova run browser`
-
-## F. Paper
-
-<a name="plots"></a>
-- [1](#paper) **Manuscript**: Full manuscript as pdf-file. This can also be found on [Biorxiv](https://www.biorxiv.org/content/10.1101/327593v2 "Searching for rewards like a child means less generalization and more directed exploration") 
-   
-<a name="plots"></a>
-- [2](#paper) **Main tex file**: Main tex file for producing the manuscript.
-
-<a name="plots"></a>
-- [2](#paper) **Bib tex file**: Bib tex file containing all of the references.
- 
+## Contributing
+Contributions to this project are welcome. Please submit pull requests for any enhancements, bug fixes, or documentation improvements.
 
 
