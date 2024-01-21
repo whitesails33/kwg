@@ -1,13 +1,18 @@
-# Kids with grids
-####  Repository for "Searching for rewards like a child means less generalization and more directed exploration"
-####  originally adopted from Schulz, Wu, Ruggeri and Meder (Psychological Science, 2019)
-####  code migration by Vasanth (NTU Center for Lifelong Learning and Individualised Cognition(CLIC), 2024)
+# Kids with Grids
 
-#### Brief readme below on how to deploy and basic working principles.
+> Repository for "Searching for rewards like a child means less generalization and more directed exploration"  
+> Originally adopted from Schulz, Wu, Ruggeri and Meder (Psychological Science, 2019)  
+> Code migration by Vasanth (NTU Center for Lifelong Learning and Individualized Cognition (CLIC), 2024)
 
+## Brief Overview
+This document provides essential information on deployment and basic working principles of the Node.js-based GridSearch game application.
+
+---
 
 ## Description
-This Node.js application is a web-based GridSearch game, originally designed for Cordova but now rewritten for a Node.js environment. The game presents users with various tasks and challenges related to grid-based exploration and decision-making. The application is built with Express.js and integrates with a SQL database for data persistence.
+**Kids with Grids** is a Node.js application that transforms the traditional GridSearch game, originally designed for Cordova, into a web-based interactive experience. This game offers a unique blend of tasks and challenges centered around grid-based exploration and decision-making, making it an intriguing tool for both educational and research purposes. Developed using Express.js, this application seamlessly integrates with a SQL database, ensuring efficient data management and persistence.
+
+---
 
 ## Features
 - Web-based interface for playing the GridSearch game.
