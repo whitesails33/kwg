@@ -58,4 +58,4 @@ jobs:
           app-name: 'CLICGridGame'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4AB5E39FD76045119AF1FD5FFE18E0F0 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2EA53B755F5C4FB1B4F4A1FC49F9FDEE }}
