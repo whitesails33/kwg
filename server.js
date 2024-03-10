@@ -48,6 +48,7 @@ app.post('/submit-data', async (req, res) => {
   console.log("data is here", data)
   // Example: Insert data into the database
   try {
+      console.log("dbconfig", dbConfig)
       // Assuming `db` is your database connection and `insertData` is a function to insert data
       try {
         let pool = await sql.connect(dbConfig);
@@ -73,10 +74,12 @@ app.post('/submit-data', async (req, res) => {
         var debugOut = document.getElementById('debug-out');
         if (debugOut) debugOut.innerHTML = debugOut.innerHTML + '<br><span style="color:red">DATA SAVED IN THE DATABASE</span>';
     } catch (error) {
+      console.log("dbconfig", dbConfig)
         console.log('Error saving data to DB:', error);
     }
   } catch (error) {
       // console.error('Database error:', error);
+      console.log("dbconfig", dbConfig)
       res.status(500).send({ status: 'Error saving data' });
   }
   res.send({ status: 'Data successfully saved' });
