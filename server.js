@@ -16,8 +16,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const dbConfig = {
   user: 'gridgame',
-  password: process.env.password,
-  server: process.env.server,
+  password: process.env.PASSWORD,
+  server: process.env.SERVER,
   database: 'clic',
   port: 1433,
   options: {
