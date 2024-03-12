@@ -52,8 +52,8 @@ app.post('/submit-data', async (req, res) => {
       // Assuming `db` is your database connection and `insertData` is a function to insert data
       try {
         let pool = await sql.connect(dbConfig);
-        let query = `INSERT INTO GridGame (UID, Duration, Date, Condition, Scale, EnvOrder, SearchHistory, BonusLevel, StarArray, TesterNotes) 
-        VALUES (@uid, @duration, @date, @condition, @scale, @envOrder, @searchHistory, @bonusLevel, @starArray, @testerNotes)`;
+        let query = `INSERT INTO GridGame (UID, Duration, Date, Condition, Scale, EnvOrder, tscollect, xcollect, ycollect, zcollect, zcollectScaled , BonusLevel, StarArray, TesterNotes) 
+        VALUES (@uid, @duration, @date, @condition, @scale, @envOrder, @tscollect, @xcollect, @ycollect, @zcollect, @zcollectScaled, @bonusLevel, @starArray, @testerNotes)`;
         data.date = new Date();
         
         console.log(data.uid, "data exists")
