@@ -376,7 +376,7 @@ function onCellTapped(cell) {
   var d = new Date();
   tscollect[trialCounter][investigationIndex] = d.getTime();
   console.log("new env",d.getTime() )
-  console.log("cells",firstCell.x,firstCell.y)
+  console.log("cells",cell.x,cell.y)
   xcollect[trialCounter][investigationIndex] = cell.x;
   ycollect[trialCounter][investigationIndex] = cell.y;
   zcollect[trialCounter][investigationIndex] = cell.noiseyValue;
