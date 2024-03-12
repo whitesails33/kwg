@@ -375,6 +375,8 @@ function onCellTapped(cell) {
   //keep track of tapped cell
   var d = new Date();
   tscollect[trialCounter][investigationIndex] = d.getTime();
+  console.log("new env",d.getTime() )
+  console.log("cells",firstCell.x,firstCell.y)
   xcollect[trialCounter][investigationIndex] = cell.x;
   ycollect[trialCounter][investigationIndex] = cell.y;
   zcollect[trialCounter][investigationIndex] = cell.noiseyValue;
@@ -774,6 +776,8 @@ function nextTrial() {
     // store initial values
     var d = new Date();
     tscollect[trialCounter][0] = d.getTime();
+    console.log("new env",d.getTime() )
+    console.log("cells",firstCell.x,firstCell.y)
     xcollect[trialCounter][0] = firstCell.x;
     ycollect[trialCounter][0] = firstCell.y;
     zcollect[trialCounter][0] = firstCell.noiseyValue;
