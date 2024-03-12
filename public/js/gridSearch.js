@@ -375,7 +375,7 @@ function onCellTapped(cell) {
   //keep track of tapped cell
   var d = new Date();
   tscollect[trialCounter][investigationIndex] = d.getTime();
-  console.log("new env",d.getTime() )
+  console.log("grid click",d.getTime() )
   console.log("cells",cell.x,cell.y)
   xcollect[trialCounter][investigationIndex] = cell.x;
   ycollect[trialCounter][investigationIndex] = cell.y;
