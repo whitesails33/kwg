@@ -15,10 +15,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const dbConfig = {
-  user: 'gridgame',
+  user: process.env.DB_USER,
   password: process.env.PASSWORD,
   server: process.env.SERVER,
-  database: 'clic',
+  database: process.env.DB_DATABASE,
   port: 1433,
   options: {
       encrypt: true, // Necessary for Azure SQL
