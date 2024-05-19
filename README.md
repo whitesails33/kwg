@@ -6,7 +6,7 @@
 
 ## Brief Overview
 This document provides essential information on deployment and basic working principles of the Node.js-based GridSearch game application.
-
+detailed hosting steps here https://youtu.be/DfvaqkA_EOA
 ---
 
 ## Description
@@ -66,7 +66,27 @@ Replace username, password, server.database.windows.net, and DB with your actual
 Modification of condition can be done by changing the `kernalRough.json` and `kernalSmooth.json file`
 
 ## Database Configuration
-The application connects to a SQL database using configurations defined in `server.js`. Ensure that the SQL Server is running and accessible. The database schema should match the expectations in the `submit-data` endpoint.
+The application connects to a SQL database using configurations defined in `server.js`. Ensure that the SQL Server is running and accessible. The database schema should match the expectations in the `submit-data` endpoint. Below is the SQL command to create the required table in the database:
+
+```
+CREATE TABLE dbo.GridGame (
+    ID INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+    UID INT,
+    Duration FLOAT,
+    Date DATETIME,
+    Condition INT,
+    Scale NVARCHAR(MAX),
+    EnvOrder NVARCHAR(MAX),
+    tscollect NVARCHAR(MAX),
+    xcollect NVARCHAR(MAX),
+    ycollect NVARCHAR(MAX),
+    zcollect NVARCHAR(MAX),
+    zcollectScaled NVARCHAR(MAX),
+    BonusLevel NVARCHAR(MAX),
+    StarArray NVARCHAR(MAX),
+    TesterNotes NVARCHAR(MAX)
+);
+```
 
 ## Deployment
 ### Deploying to a Cloud Platform (e.g., Heroku, AWS, Azure)
