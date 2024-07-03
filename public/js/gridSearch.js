@@ -332,16 +332,16 @@ function onButtonInstructionsPressed(evt) {
 
 function onButtonFinishPressed() {
 
-  var optionA = document.querySelector('input[name="option-a"]:checked');
-  if (optionA == null) {
-    return alert("Fill option A!");
-  }
+  // var optionA = document.querySelector('input[name="option-a"]:checked');
+  // if (optionA == null) {
+  //   return alert("Fill option A!");
+  // }
 
-  var notes = document.getElementById("tester-notes").value;
+  // var notes = document.getElementById("tester-notes").value;
 
   testerNotes = {
-    "option-a": parseInt(optionA.value),
-    "notes": notes
+    "option-a": 0,
+    "notes": "deployed version "
   };
 
   senddata();
